@@ -42,10 +42,12 @@ function AppRoutes() {
   );
 }
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
 function App() {
   return (
     <AppDataProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <AppRoutes />
       </BrowserRouter>
     </AppDataProvider>
