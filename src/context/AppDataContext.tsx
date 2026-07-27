@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import type { ReactNode } from "react";
+import { ref, remove, set } from "firebase/database";
 import type { AppData, DayLog, Settings } from "../types";
 import { clearStorage, loadFromStorage, saveToStorage } from "../utils/storage";
+import { database } from "../firebase";
 
 type Action =
   | { type: "SET_SETTINGS"; settings: Settings }
@@ -29,6 +31,7 @@ interface AppDataContextValue {
   upsertLog: (log: DayLog) => void;
   getLog: (dateKey: string) => DayLog | undefined;
   resetAllData: () => void;
+  stopSharing: (shareCode: string) => void;
 }
 
 const AppDataContext = createContext<AppDataContextValue | null>(null);
@@ -40,6 +43,14 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     saveToStorage(data);
   }, [data]);
 
+  const sharing = data.settings?.partnerSharing;
+  useEffect(() => {
+    if (!database || !sharing?.enabled || !sharing.shareCode) return;
+    set(ref(database, `shares/${sharing.shareCode}`), data).catch(() => {
+      // Broadcast is best-effort — local storage remains the source of truth either way.
+    });
+  }, [data, sharing?.enabled, sharing?.shareCode]);
+
   const value: AppDataContextValue = {
     data,
     saveSettings: (settings) => dispatch({ type: "SET_SETTINGS", settings }),
@@ -48,6 +59,12 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     resetAllData: () => {
       clearStorage();
       dispatch({ type: "RESET" });
+    },
+    stopSharing: (shareCode) => {
+      if (!database || !shareCode) return;
+      remove(ref(database, `shares/${shareCode}`)).catch(() => {
+        // Best-effort cleanup — the code will simply be regenerated if re-enabled later.
+      });
     },
   };
 

@@ -1,13 +1,20 @@
 import { NavLink } from "react-router-dom";
 
-const tabs = [
+export interface NavTab {
+  to: string;
+  label: string;
+  icon: string;
+  end: boolean;
+}
+
+const defaultTabs: NavTab[] = [
   { to: "/", label: "Today", icon: "🌸", end: true },
   { to: "/calendar", label: "Calendar", icon: "📅", end: false },
   { to: "/insights", label: "Insights", icon: "📊", end: false },
   { to: "/settings", label: "Settings", icon: "⚙️", end: false },
 ];
 
-export function BottomNav() {
+export function BottomNav({ tabs = defaultTabs }: { tabs?: NavTab[] }) {
   return (
     <nav className="sticky bottom-0 z-40 border-t border-bloom-100 bg-white/95 backdrop-blur">
       <ul className="mx-auto flex max-w-md items-stretch justify-between px-2">

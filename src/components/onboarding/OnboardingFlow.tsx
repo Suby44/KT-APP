@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { Stepper } from "./Stepper";
 import type { Settings } from "../../types";
@@ -48,6 +49,9 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               Track your cycle, understand your body, and get personalized predictions. Let's set
               things up — it only takes a minute.
             </p>
+            <Link to="/partner" className="mt-4 inline-block text-sm font-medium text-bloom-600 underline">
+              Just here to view a partner's shared data?
+            </Link>
           </div>
         )}
 

@@ -7,6 +7,7 @@ import { CalendarPage } from "./pages/CalendarPage";
 import { InsightsPage } from "./pages/InsightsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ReportPage } from "./pages/ReportPage";
+import { PartnerRoot } from "./pages/partner/PartnerRoot";
 
 function AppRoutes() {
   const { data } = useAppData();
@@ -15,6 +16,7 @@ function AppRoutes() {
   if (!isOnboarded) {
     return (
       <Routes>
+        <Route path="/partner/*" element={<PartnerRoot />} />
         <Route path="*" element={<OnboardingPage />} />
       </Routes>
     );
@@ -22,6 +24,7 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/partner/*" element={<PartnerRoot />} />
       <Route path="/report" element={<ReportPage />} />
       <Route
         path="/*"

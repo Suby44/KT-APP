@@ -32,12 +32,18 @@ export interface DayLog {
 
 export type TrackingMode = "cycle" | "pregnancy";
 
+export interface PartnerSharing {
+  enabled: boolean;
+  shareCode: string;
+}
+
 export interface Settings {
   lastPeriodStart: string; // yyyy-MM-dd; also doubles as LMP when trackingMode is "pregnancy"
   averageCycleLength: number; // days
   averagePeriodLength: number; // days
   onboardingComplete: boolean;
   trackingMode?: TrackingMode; // defaults to "cycle" when absent (pre-existing saved data)
+  partnerSharing?: PartnerSharing; // absent/disabled means nothing is broadcast
 }
 
 export type CyclePhase =
